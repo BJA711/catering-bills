@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Menu Orders</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f4f4;
+    padding:15px;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.header h1{
+    font-size:28px;
+}
+
+.new-btn{
+    background:#16a34a;
+    color:white;
+    text-decoration:none;
+    padding:12px 20px;
+    border-radius:6px;
+    font-weight:bold;
+}
+
+.table-wrapper{
+    background:white;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#1f2937;
+    color:white;
+    text-align:left;
+    padding:14px;
+}
+
+td{
+    padding:14px;
+    border-bottom:1px solid #e5e7eb;
+}
+
+tr:hover{
+    background:#f9fafb;
+}
+
+.actions{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    text-decoration:none;
+    color:white;
+    padding:8px 12px;
+    border-radius:5px;
+    font-size:14px;
+}
+
+.print{
+    background:#2563eb;
+}
+
+.edit{
+    background:#f59e0b;
+}
+
+.delete{
+    background:#dc2626;
+}
+
+.empty{
+    background:white;
+    padding:40px;
+    text-align:center;
+}
+
+@media(max-width:768px){
+
+    table,
+    thead,
+    tbody,
+    th,
+    td,
+    tr{
+        display:block;
+    }
+
+    thead{
+        display:none;
+    }
+
+    tr{
+        background:white;
+        margin-bottom:15px;
+        border-radius:10px;
+        padding:15px;
+        box-shadow:0 2px 8px rgba(0,0,0,.08);
+    }
+
+    td{
+        border:none;
+        padding:6px 0;
+    }
+
+    td::before{
+        font-weight:bold;
+        display:block;
+        margin-bottom:3px;
+    }
+
+    td:nth-child(1)::before{
+        content:"Customer";
+    }
+
+    td:nth-child(2)::before{
+        content:"Event";
+    }
+
+    td:nth-child(3)::before{
+        content:"Date";
+    }
+
+    td:nth-child(4)::before{
+        content:"Actions";
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>Menu Orders</h1>
+
+        <a href="{% url 'new_order' %}" class="new-btn">
+            + New Order
+        </a>
+    </div>
+
+    {% if orders %}
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Event</th>
+                    <th>Date</th>
+                    <th width="250">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+            {% for order in orders %}
+
+                <tr>
+
+                    <td>
+                        {{ order.customer_name }}
+                    </td>
+
+                    <td>
+                        {{ order.event_name }}
+                    </td>
+
+                    <td>
+                        {{ order.event_date }}
+                    </td>
+
+                    <td>
+
+                        <div class="actions">
+
+                            <a href="/print/{{ order.id }}/"
+                               class="btn print">
+                                Print
+                            </a>
+
+                            <a href="/edit/{{ order.id }}/"
+                               class="btn edit">
+                                Edit
+                            </a>
+
+                            <a href="/delete/{{ order.id }}/"
+                               class="btn delete">
+                                Delete
+                            </a>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+    <div class="empty">
+        <h3>No Orders Created Yet</h3>
+    </div>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>

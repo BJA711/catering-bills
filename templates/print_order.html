@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>{{ order.customer_name }}</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:"Times New Roman",serif;
+    background:#f4f4f4;
+    padding:20px;
+}
+
+.page{
+    max-width:900px;
+    margin:auto;
+    background:white;
+    min-height:100vh;
+    padding:50px;
+    position:relative;
+    box-shadow:0 0 20px rgba(0,0,0,.1);
+}
+
+.header{
+    text-align:center;
+    border-bottom:2px solid #000;
+    padding-bottom:20px;
+    margin-bottom:25px;
+}
+
+.logo{
+    width:90px;
+    height:90px;
+    object-fit:contain;
+}
+
+.company-name{
+    font-size:34px;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.tagline{
+    margin-top:5px;
+    color:#555;
+}
+
+.details{
+    margin-bottom:30px;
+}
+
+.details table{
+    width:100%;
+}
+
+.details td{
+    padding:6px 0;
+}
+
+.section{
+    margin-bottom:25px;
+}
+
+.section-title{
+    font-size:25px;
+    font-weight:bold;
+    text-transform:uppercase;
+    border-bottom:1px solid #ccc;
+    padding-bottom:5px;
+    margin-bottom:10px;
+}
+
+.section ul{
+    margin-left:25px;
+}
+
+.section li{
+    margin-bottom:6px;
+    font-size:25px;
+}
+
+.watermark{
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    opacity:.05;
+    z-index:0;
+}
+
+.watermark img{
+    width:450px;
+}
+
+.content{
+    position:relative;
+    z-index:1;
+}
+.header{
+    background:#000;
+    color:white;
+    display:flex;
+    align-items:center;
+    gap:25px;
+    padding:25px 35px;
+    margin:-50px -50px 30px -50px;
+    position:relative;
+    overflow:hidden;
+}
+
+.header::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+    radial-gradient(circle at top right,
+    rgba(212,175,55,.35),
+    transparent 35%);
+    pointer-events:none;
+}
+
+.logo{
+    width:130px;
+    height:130px;
+    object-fit:contain;
+}
+
+.header-right{
+    flex:1;
+}
+
+.brand-name{
+    font-size:72px;
+    line-height:1;
+    font-weight:700;
+    letter-spacing:4px;
+    color:#d4af37;
+    font-family:'Cinzel', serif;
+}
+
+.brand-subtitle{
+    font-size:30px;
+    letter-spacing:2px;
+    color:#d4af37;
+    margin-top:5px;
+    font-family:'Cinzel', serif;
+}
+
+.tagline{
+    margin-top:12px;
+    color:#d4af37;
+    font-size:18px;
+}
+.print-btn{
+    display:block;
+    margin:30px auto;
+    padding:12px 25px;
+    border:none;
+    background:#2563eb;
+    color:white;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+.section{
+    margin-bottom:25px;
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
+.section-title{
+    page-break-after: avoid;
+    break-after: avoid;
+}
+
+.section ul{
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+@media print{
+    section{
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+    .section-title{
+        margin-top: 25px;
+        padding-top: 20px;
+    }
+
+    body{
+        background:white;
+        padding:0;
+    }
+
+    .page{
+        box-shadow:none;
+        margin:0;
+        max-width:none;
+    }
+
+    .print-btn{
+        display:none;
+    }
+
+    @page{
+        size:A4;
+        margin:15mm;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <div class="watermark">
+        <img src="/static/images/logo.png" alt="">
+    </div>
+
+    <div class="content">
+
+      <div class="header">
+
+    <div class="header-left">
+        <img
+            src="/static/images/logo.png"
+            class="logo"
+            alt="Logo">
+    </div>
+
+    <div class="header-right">
+
+        <div class="brand-name">
+            MARIA
+        </div>
+
+        <div class="brand-subtitle">
+            CATERING & EVENTS
+        </div>
+
+        <div class="tagline">
+            Experience you can trust. Flavors you'll remember.
+        </div>
+
+    </div>
+
+</div>
+
+        <div class="details">
+
+            <table>
+
+                <tr>
+                    <td width="140"><strong>Customer</strong></td>
+                    <td>: {{ order.customer_name }}</td>
+                </tr>
+
+                <tr>
+                    <td><strong>Event</strong></td>
+                    <td>: {{ order.event_name }}</td>
+                </tr>
+
+                <tr>
+                    <td><strong>Date</strong></td>
+                    <td>: {{ order.event_date }}</td>
+                </tr>
+
+            </table>
+
+        </div>
+
+        {% for section in order.sections.all %}
+
+        <div class="section">
+
+            <div class="section-title">
+                {{ section.category }}
+            </div>
+
+            <ul>
+
+                {% for item in section.get_items %}
+
+                <li>{{ item }}</li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+<button
+    class="print-btn"
+    onclick="window.print()">
+    Print Menu
+</button>
+
+</body>
+</html>

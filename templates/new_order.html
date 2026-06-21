@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Menu Order</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f4f4;
+    padding:15px;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    background:#fff;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 2px 10px rgba(0,0,0,.1);
+}
+
+h1{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.form-row{
+    margin-bottom:15px;
+}
+
+label{
+    display:block;
+    margin-bottom:5px;
+    font-weight:bold;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+.table-wrapper{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+}
+
+th,td{
+    border:1px solid #ddd;
+    padding:3px;
+    vertical-align:top;
+}
+
+th{
+    background:#f7f7f7;
+    text-align:left;
+}
+
+td input{
+    border:none;
+    outline:none;
+}
+
+td textarea{
+    width:100%;
+    min-height:140px;
+    border:none;
+    outline:none;
+    resize:vertical;
+    padding:8px;
+    font-family:inherit;
+    font-size:15px;
+}
+
+.action-cell{
+    width:55px;
+    text-align:center;
+}
+
+.remove-btn{
+    width:35px;
+    height:35px;
+    border:none;
+    border-radius:5px;
+    background:#dc2626;
+    color:white;
+    cursor:pointer;
+}
+
+.add-btn{
+    margin-top:15px;
+    padding:12px 20px;
+    border:none;
+    border-radius:5px;
+    background:#2563eb;
+    color:white;
+    cursor:pointer;
+}
+
+.save-btn{
+    margin-top:15px;
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:5px;
+    background:#16a34a;
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+}
+
+@media(max-width:768px){
+
+    .container{
+        padding:15px;
+    }
+
+    td textarea{
+        min-height:120px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Create Menu Order</h1>
+
+<form method="post">
+
+{% csrf_token %}
+
+<div class="form-row">
+    <label>Customer Name</label>
+    <input type="text" name="customer_name" required>
+</div>
+
+<div class="form-row">
+    <label>Event Name</label>
+    <input type="text" name="event_name">
+</div>
+
+<div class="form-row">
+    <label>Event Date</label>
+    <input type="date" name="event_date" required>
+</div>
+
+<div class="table-wrapper">
+
+<table id="menuTable">
+
+<thead>
+<tr>
+    <th style="width:25%">Category</th>
+    <th style="width:70%">Items (One Item Per Line)</th>
+    <th style="width:5%">X</th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>
+    <input
+        type="text"
+        name="category[]"
+        placeholder="Category Name">
+</td>
+
+<td>
+    <textarea
+        name="items[]"
+        placeholder="Chicken 65&#10;Fish Fry&#10;Cutlet"></textarea>
+</td>
+
+<td class="action-cell">
+    <button
+        type="button"
+        class="remove-btn"
+        onclick="removeRow(this)">
+        ×
+    </button>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<button
+    type="button"
+    class="add-btn"
+    onclick="addRow()">
+    + Add Category
+</button>
+
+<button
+    type="submit"
+    class="save-btn">
+    Save Order
+</button>
+
+</form>
+
+</div>
+
+<script>
+
+function addRow() {
+
+    let tbody =
+        document.querySelector("#menuTable tbody");
+
+    let row =
+        document.createElement("tr");
+
+    row.innerHTML = `
+        <td>
+            <input
+                type="text"
+                name="category[]"
+                placeholder="Category Name">
+        </td>
+
+        <td>
+            <textarea
+                name="items[]"
+                placeholder="One item per line"></textarea>
+        </td>
+
+        <td class="action-cell">
+            <button
+                type="button"
+                class="remove-btn"
+                onclick="removeRow(this)">
+                ×
+            </button>
+        </td>
+    `;
+
+    tbody.appendChild(row);
+}
+
+function removeRow(btn) {
+
+    let rows =
+        document.querySelectorAll(
+            "#menuTable tbody tr"
+        );
+
+    if(rows.length > 1){
+        btn.closest("tr").remove();
+    }
+}
+
+</script>
+
+</body>
+</html>
