@@ -72,7 +72,7 @@ body{
 }
 
 .section-title{
-    font-size:25px;
+    font-size:18px;
     font-weight:bold;
     text-transform:uppercase;
     border-bottom:1px solid #ccc;
@@ -86,7 +86,7 @@ body{
 
 .section li{
     margin-bottom:6px;
-    font-size:25px;
+    font-size:15px;
 }
 
 .watermark{
@@ -184,6 +184,45 @@ body{
     break-after: avoid;
 }
 
+.print-header{
+    width:100%;
+    border-bottom:3px solid #000;
+    padding-bottom:15px;
+    margin-bottom:25px;
+}
+
+.logo-cell{
+    width:140px;
+    vertical-align:middle;
+}
+
+.title-cell{
+    vertical-align:middle;
+}
+
+.logo{
+    width:110px;
+    height:110px;
+}
+
+.brand-name{
+    font-size:42px;
+    font-weight:700;
+    color:#b8860b;
+    font-family:'Cinzel', serif;
+}
+
+.brand-subtitle{
+    font-size:20px;
+    color:#b8860b;
+    font-family:'Cinzel', serif;
+}
+
+.tagline{
+    margin-top:6px;
+    font-size:14px;
+    color:#444;
+}
 .section ul{
     page-break-inside: avoid;
     break-inside: avoid;
@@ -232,32 +271,32 @@ body{
 
     <div class="content">
 
-      <div class="header">
+   <table class="print-header">
+    <tr>
+        <td class="logo-cell">
+            <img
+                src="{% static 'images/logo.png' %}"
+                class="logo"
+                alt="Logo">
+        </td>
 
-    <div class="header-left">
-        <img
-    src="{% static 'images/logo.png' %}"
-    class="logo"
-    alt="Logo">
-    </div>
+        <td class="title-cell">
 
-    <div class="header-right">
+            <div class="brand-name">
+                MARIA
+            </div>
 
-        <div class="brand-name">
-            MARIA
-        </div>
+            <div class="brand-subtitle">
+                CATERING & EVENTS
+            </div>
 
-        <div class="brand-subtitle">
-            CATERING & EVENTS
-        </div>
+            <div class="tagline">
+                Experience you can trust. Flavors you'll remember.
+            </div>
 
-        <div class="tagline">
-            Experience you can trust. Flavors you'll remember.
-        </div>
-
-    </div>
-
-</div>
+        </td>
+    </tr>
+</table>
 
         <div class="details">
 
