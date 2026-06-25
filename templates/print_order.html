@@ -26,7 +26,10 @@ body{
     margin:auto;
     background:white;
     min-height:100vh;
-
+    background-image:url("{% static 'images/frame.png' %}");
+    background-size:100% 100%;
+    background-repeat:no-repeat;
+    background-color:white;
     position:relative;
     box-shadow:0 0 20px rgba(0,0,0,.1);
 }
@@ -66,6 +69,7 @@ body{
 
 .details td{
     padding:6px 0;
+    color:white;
 }
 
 .section{
@@ -83,24 +87,25 @@ body{
 
 .section ul{
     margin-left:25px;
+    color:white;
 }
 
 .section li{
     margin-bottom:6px;
-    font-size:15px;
+    font-size:17px;
 }
 
 .watermark{
     position:fixed;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    opacity:.05;
-    z-index:0;
+    top:0%;
+    left:0%;
+
+    opacity:1;
+    z-index:-1;
 }
 
 .watermark img{
-    width:450px;
+    width:100%;
 }
 
 .content{
@@ -162,6 +167,7 @@ body{
     color:#d4af37;
     font-size:18px;
 }
+
 .print-btn{
     display:block;
     margin:30px auto;
@@ -172,20 +178,14 @@ body{
     border-radius:6px;
     cursor:pointer;
     font-size:16px;
+    z-index:1;
 }
 
-.section{
-    margin-bottom:25px;
-    page-break-inside: avoid;
-    break-inside: avoid;
-}
 .menu{
-    padding:30px;
-    padding-top:0px;
-  }
-.section-title{
-    page-break-after: avoid;
-    break-after: avoid;
+    margin:40px;
+    margin-top:5px;
+    padding:20px;
+    padding-top:5px;
 }
 
 .print-header{
@@ -193,7 +193,7 @@ body{
     border-bottom:3px solid #000;
     padding-bottom:15px;
     margin-bottom:25px;
-    background-color:black;
+    background-color:transparent;
     padding:25px;
 }
 
@@ -207,8 +207,8 @@ body{
 }
 
 .logo{
-    width:110px;
-    height:110px;
+    width:120px;
+    height:120px;
 }
 
 .print-header{
@@ -229,13 +229,13 @@ body{
     font-family:'Cinzel', serif;
     font-size:42px;
     color:#c9a227;
-    font-weight:700;
+    font-weight:900;
 }
 
 .brand-subtitle{
     font-family:'Cinzel', serif;
     color:#c9a227;
-    font-size:18px;
+    font-size:23px;
     letter-spacing:2px;
 }
 .print-header{
@@ -256,7 +256,7 @@ body{
 .tagline{
     color:#666;
     margin-top:5px;
-    font-size:10px;
+    font-size:13px;
 }
 .section-title{
     color:#c9a227;
@@ -264,38 +264,115 @@ body{
     font-family:'Cinzel', serif;
     font-size:24px;
     margin-bottom:10px;
-}
-@media print{
-    section{
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-    }
-    .section-title{
-        margin-top: 25px;
-        padding-top: 20px;
-    }
-
-    body{
-        background:white;
-        padding:0;
-    }
-
-    .page{
-        box-shadow:none;
-        margin:0;
-        max-width:none;
-    }
-
-    .print-btn{
-        display:none;
-    }
-
-    @page{
-        size:A4;
-        margin:5mm;
-    }
+    padding-bottom:6px;
 }
 
+/* Fallback default wrapper style for browser screen display */
+.print-matrix {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* --- DYNAMIC MULTI-PAGE PRINT MATRIX RENDERER --- */
+@media print {
+    html, body {
+        background: black;
+        margin: 0 !important;
+        padding: 0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    .watermark{
+    z-index:0;
+    }
+    .page {
+        box-shadow: none;
+        margin: 0;
+        max-width: none;
+        background: none !important;
+    }
+
+    .content {
+        padding: 0;
+    }
+
+    /* Convert structural layout directly into print handling tables */
+    .print-matrix {
+        display: table !important;
+        width: 100%;
+    }
+
+    .matrix-header {
+        display: table-header-group !important; /* Forces the entire brand identity to repeat on all pages */
+    }
+
+    .matrix-body {
+        display: table-row-group !important;
+    }
+
+    .matrix-cell {
+        padding: 0 45px 35px 45px; /* Keeps text away from the paper margins */
+    }
+
+    .print-header {
+        margin: 0;
+        padding: 40px 45px 15px 45px;
+        border-bottom: none;
+    }
+
+    /* THE FRAME BORDER SOLUTION:
+       Applying borders directly inside the multi-page row group container, combined with
+       box-decoration-break, forces the gold box to terminate cleanly on Page 1,
+       and open up completely fresh below the repeated header on Page 2!
+    */
+    .menu {
+        margin: 0;
+        padding: 30px 35px;
+        border: 2px solid #d4af37 !important;
+        position: relative;
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
+    }
+
+    .section {
+        page-break-inside: avoid;
+        break-inside: avoid;
+        margin-top: 0;
+        margin-bottom: 25px;
+    }
+
+    .section-title::before {
+        display: none !important;
+    }
+
+    /* Full-bleed background texture graphic initialization */
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url("{% static 'images/frame.png' %}");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        z-index: 0;
+    }
+
+    /* Disable old fixed border configuration layout rules */
+    .page::after {
+        display: none !important;
+    }
+
+    .print-btn {
+        display: none;
+    }
+
+    @page {
+        size: A4;
+        margin: 0;
+    }
+}
 </style>
 </head>
 
@@ -304,99 +381,80 @@ body{
 <div class="page">
 
     <div class="watermark">
-        <img src="{% static 'images/logo.png' %}">
+        <img src="{% static 'images/f1.png' %}">
     </div>
 
     <div class="content">
+        <table class="print-matrix">
 
-   <table class="print-header">
-    <tr>
-        <td class="logo-cell">
-            <img
-                src="{% static 'images/logo.png' %}"
-                class="logo"
-                alt="Logo">
-        </td>
-
-        <td class="title-cell">
-
-            <div class="brand-name">
-                MARIA
-            </div>
-
-            <div class="brand-subtitle">
-                CATERING & EVENTS
-            </div>
-
-            <div class="tagline">
-                Experience you can trust. Flavors you'll remember.
-            </div>
-            <div class="contact-info">
-    <div>📞 9447456705</div>
-    <div>📞 9496452516</div>
-    <div>📞 8891856705</div>
-                <div style="color:#c9a227;font-size:17px;">Kothanalloor, Kottayam</div>
-</div>
-
-
-
-    </tr>
-</table>
-<div class="menu">
-        <div class="details">
-
-            <table>
-
+            <thead class="matrix-header">
                 <tr>
-                    <td width="140"><strong>Customer</strong></td>
-                    <td>: {{ order.customer_name }}</td>
+                    <td>
+                       <table class="print-header">
+                        <tr>
+                            <td class="logo-cell">
+                                <img src="{% static 'images/logo.png' %}" class="logo" alt="Logo">
+                            </td>
+                            <td class="title-cell">
+                                <div class="brand-name">MARIA</div>
+                                <div class="brand-subtitle">CATERING & EVENTS</div>
+                                <div class="tagline">Experience you can trust. Flavors you'll remember.</div>
+                                <div class="contact-info">
+                                    <div>📞 9447456705</div>
+                                    <div>📞 9496452516</div>
+                                    <div>📞 8891856705</div>
+                                    <div style="color:#c9a227;font-size:17px;">Kothanalloor, Kottayam</div>
+                                </div>
+                            </td>
+                        </tr>
+                       </table>
+                    </td>
                 </tr>
+            </thead>
 
+            <tbody class="matrix-body">
                 <tr>
-                    <td><strong>Event</strong></td>
-                    <td>: {{ order.event_name }}</td>
+                    <td class="matrix-cell">
+                        <div class="menu">
+                            <div class="details">
+                                <table>
+                                    <tr>
+                                        <td><strong>Event</strong></td>
+                                        <td>: {{ order.event_name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Date</strong></td>
+                                        <td>: {{ order.event_date }}</td>
+                                    </tr>
+                                     <tr>
+                                        <td width="140"><strong>Rate</strong></td>
+                                        <td>: {{ order.customer_name }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            {% for section in order.sections.all %}
+                            <div class="section">
+                                <div class="section-title">
+                                    {{ section.category }}
+                                </div>
+                                <ul>
+                                    {% for item in section.get_items %}
+                                    <li>{{ item }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </td>
                 </tr>
+            </tbody>
 
-                <tr>
-                    <td><strong>Date</strong></td>
-                    <td>: {{ order.event_date }}</td>
-                </tr>
-
-            </table>
-
-        </div>
-
-        {% for section in order.sections.all %}
-
-        <div class="section">
-
-            <div class="section-title">
-                {{ section.category }}
-            </div>
-
-            <ul>
-
-                {% for item in section.get_items %}
-
-                <li>{{ item }}</li>
-
-                {% endfor %}
-
-            </ul>
-
-        </div>
-
-        {% endfor %}
-
+        </table>
     </div>
-
 </div>
+<div class="print-button">
+<button class="print-btn" onclick="window.print()">Print Menu</button>
 </div>
-<button
-    class="print-btn"
-    onclick="window.print()">
-    Print Menu
-</button>
-
 </body>
 </html>

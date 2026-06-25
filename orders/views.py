@@ -13,6 +13,19 @@ def print_order(request, pk):
         {"order": order}
     )
 
+def print_order2(request, pk):
+    order = get_object_or_404(
+        MenuOrder,
+        pk=pk
+    )
+    return render(
+        request,
+        "print_order2.html",
+        {
+            "order": order
+        }
+    )
+
 def home(request):
 
     orders = MenuOrder.objects.order_by("-id")

@@ -7,4 +7,5 @@ urlpatterns = [
     path('edit/<int:pk>/', views.edit_order, name='edit_order'),
     path('delete/<int:pk>/', views.delete_order, name='delete_order'),
     path('print/<int:pk>/', views.print_order, name='print_order'),
+    path('print2/<int:pk>/',views.print_order2,name='print_order2'),
 ]
